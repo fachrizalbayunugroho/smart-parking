@@ -1,0 +1,48 @@
+.main {
+	display: flex;
+	justify-content: center;
+}
+
+.parking-lot {
+	margin-top: 70px;
+	height: 400px;
+    width: 800px; 
+    padding: 20px;
+    background-color: #eba715; 
+    border-radius: 10px; 
+    text-align: center;
+}
+
+
+.slots {
+    display: grid;
+    margin-top: 25px;
+    margin-left: 100px;
+    grid-template-columns: repeat(4, 1fr); 
+    gap: 10px; 
+}
+.slot {
+    width: 60px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: #fff;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+.occupied {
+    background-color: #ff4c4c;
+}
+
+.available {
+    background-color: #4caf50;
+}
+
+.available-slots {
+	margin-top: 10px;
+    font-size: 20px;
+    font-weight: bold;
+}

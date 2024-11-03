@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
 import Navbar from './Navbar';
+import { database } from "./firebase"; 
 
 function Main() {
   const [availableCount, setAvailableCount] = useState(0);
+  const [data, setData] = useState({});
 
   useEffect(() => {
-    const slots = document.querySelectorAll('.slot');
-    const availableSlots = Array.from(slots).filter(slot => slot.classList.contains('available'));
-    setAvailableCount(availableSlots.length);
+    const dbRef = database.ref("/parking"); 
+
+    dbRef.on("value", (snapshot) => {
+      const fetchedData = snapshot.val();
+      setData(fetchedData);
+
+      const availableSlots = Object.values(fetchedData).filter(slot => !slot.occupied).length;
+      setAvailableCount(availableSlots);
+    });
+
+    // Cleanup listener on component unmount
+    return () => dbRef.off();
   }, []);
+
+  const slots = Object.entries(data).filter(([key]) => key.startsWith('slot'));
 
   return (
     <div>
@@ -17,14 +30,12 @@ function Main() {
         <div className="parking-lot">
           <h1>PARKING LOT</h1>
           <div className="slots">
-            <div className="slot occupied">Slot 1</div>
-            <div className="slot occupied">Slot 2</div>
-            <div className="slot available">Slot 3</div>
-            <div className="slot available">Slot 4</div>
-            <div className="slot occupied">Slot 5</div>
-            <div className="slot occupied">Slot 6</div>
-            <div className="slot available">Slot 7</div>
-            <div className="slot available">Slot 8</div>
+            {slots.map(([slot, details]) => (
+              <div key={slot} id={slot} className={`slot ${details.occupied ? 'occupied' : 'available'}`}>
+                {slot}<br />
+                {details.occupied ? "Occupied" : "Available"}
+              </div>
+            ))}
           </div>
           <div className="available-slots">
             Slot tersedia: <span id="available-count">{availableCount}</span>

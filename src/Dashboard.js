@@ -1,12 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Navbar from './Navbar';
+import { database } from './firebase';
+import { ref, onValue } from "firebase/database";
 
 function Dashboard() {
   const [number, setNumber] = useState(0);
+  const [data, setData] = useState({});
 
-  const handleClick = () => {
-    setNumber((prevNumber) => prevNumber + 1);
-  };
+  useEffect(() => {
+    const dbRef = ref(database, "/parking"); 
+
+    const variable = onValue(dbRef, (snapshot) => {
+      const fetchedData = snapshot.val();
+      setData(fetchedData);
+
+      const vehicles = fetchedData.vehiclesEntered;
+      setNumber(vehicles);
+    });
+
+  }, []);
 
   return (
   	<div>
@@ -44,12 +56,6 @@ function Dashboard() {
 </table>
     <div className="text-center mt-5">
       Jumlah Parkir (bertambah setiap kendaraan masuk) : <span>{number}</span>
-      <button
-        onClick={handleClick}
-        style={{ display: 'none' }}
-      >
-        Increment
-      </button>
     </div>
     </div>
   );

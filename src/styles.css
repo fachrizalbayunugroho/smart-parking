@@ -3,6 +3,11 @@
 	justify-content: center;
 }
 
+.pos {
+	padding: 250px 0;
+	margin-right: 25px;
+}
+
 .parking-lot {
 	margin-top: 70px;
 	height: 400px;
@@ -22,7 +27,7 @@
     gap: 10px; 
 }
 .slot {
-    width: 60px;
+    width: 75px;
     height: 100px;
     display: flex;
     justify-content: center;
